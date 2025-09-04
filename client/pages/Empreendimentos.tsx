@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,39 +10,57 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useTenant } from "@/contexts/TenantContext";
 
-const DATA = [
-  {
-    nome: "Fazenda Boa Vista",
-    cnpj: "12.345.678/0001-99",
-    municipio: "Goiânia/GO",
-    atividade: "Agropecuária",
-    licencas: 4,
-  },
-  {
-    nome: "Usina Rio Verde",
-    cnpj: "98.765.432/0001-11",
-    municipio: "Cuiabá/MT",
-    atividade: "Geração de Energia",
-    licencas: 6,
-  },
-  {
-    nome: "Porto Amazônia",
-    cnpj: "01.234.567/0001-22",
-    municipio: "Manaus/AM",
-    atividade: "Logística Portuária",
-    licencas: 3,
-  },
-];
+interface Empreendimento {
+  id: number;
+  nome: string;
+  cnpj: string;
+  municipio: string;
+  uf: string;
+  atividade: string;
+}
 
 export default function Empreendimentos() {
+  const [empreendimentos, setEmpreendimentos] = useState<Empreendimento[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { token, tenant } = useTenant();
+
+  useEffect(() => {
+    if (token) {
+      fetchEmpreendimentos();
+    }
+  }, [token]);
+
+  const fetchEmpreendimentos = async () => {
+    try {
+      const response = await fetch('/api/tenant/empreendimentos', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setEmpreendimentos(data);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar empreendimentos:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <div>Carregando...</div>;
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Empreendimentos</h1>
           <p className="text-muted-foreground">
-            Cadastro de empreendimentos e empresas
+            {tenant?.nome} - Cadastro de empreendimentos e empresas
           </p>
         </div>
         <div className="flex gap-2">
@@ -61,7 +80,7 @@ export default function Empreendimentos() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Lista</CardTitle>
+          <CardTitle>Lista ({empreendimentos.length} empreendimentos)</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
@@ -71,17 +90,15 @@ export default function Empreendimentos() {
                 <TableHead>CNPJ</TableHead>
                 <TableHead>Município/UF</TableHead>
                 <TableHead>Atividade</TableHead>
-                <TableHead className="text-right">Licenças</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {DATA.map((r) => (
-                <TableRow key={r.cnpj}>
-                  <TableCell className="font-medium">{r.nome}</TableCell>
-                  <TableCell>{r.cnpj}</TableCell>
-                  <TableCell>{r.municipio}</TableCell>
-                  <TableCell>{r.atividade}</TableCell>
-                  <TableCell className="text-right">{r.licencas}</TableCell>
+              {empreendimentos.map((emp) => (
+                <TableRow key={emp.id}>
+                  <TableCell className="font-medium">{emp.nome}</TableCell>
+                  <TableCell>{emp.cnpj}</TableCell>
+                  <TableCell>{emp.municipio}/{emp.uf}</TableCell>
+                  <TableCell>{emp.atividade}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

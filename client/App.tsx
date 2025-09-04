@@ -20,34 +20,52 @@ import Documentos from "./pages/Documentos";
 import Equipe from "./pages/Equipe";
 import Configuracoes from "./pages/Configuracoes";
 import Relatorios from "./pages/Relatorios";
+import Login from "./pages/Login";
+import { TenantProvider, useTenant } from "./contexts/TenantContext";
 
 const queryClient = new QueryClient();
+
+function ProtectedRoutes() {
+  const { isAuthenticated } = useTenant();
+  
+  if (!isAuthenticated) {
+    return <Routes><Route path="*" element={<Login />} /></Routes>;
+  }
+  
+  return (
+    <Routes>
+      <Route element={<AppLayout />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/licencas" element={<Licencas />} />
+        <Route path="/empreendimentos" element={<Empreendimentos />} />
+        <Route path="/estudos" element={<EstudosAmbientais />} />
+        <Route path="/condicionantes" element={<Condicionantes />} />
+        <Route path="/vistorias" element={<Vistorias />} />
+        <Route path="/agenda" element={<Agenda />} />
+        <Route path="/mapa" element={<Mapa />} />
+        <Route path="/documentos" element={<Documentos />} />
+        <Route path="/relatorios" element={<Relatorios />} />
+        <Route path="/equipe" element={<Equipe />} />
+        <Route path="/configuracoes" element={<Configuracoes />} />
+      </Route>
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route element={<AppLayout />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/licencas" element={<Licencas />} />
-            <Route path="/empreendimentos" element={<Empreendimentos />} />
-            <Route path="/estudos" element={<EstudosAmbientais />} />
-            <Route path="/condicionantes" element={<Condicionantes />} />
-            <Route path="/vistorias" element={<Vistorias />} />
-            <Route path="/agenda" element={<Agenda />} />
-            <Route path="/mapa" element={<Mapa />} />
-            <Route path="/documentos" element={<Documentos />} />
-            <Route path="/relatorios" element={<Relatorios />} />
-            <Route path="/equipe" element={<Equipe />} />
-            <Route path="/configuracoes" element={<Configuracoes />} />
-          </Route>
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <TenantProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/*" element={<ProtectedRoutes />} />
+          </Routes>
+        </BrowserRouter>
+      </TenantProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
