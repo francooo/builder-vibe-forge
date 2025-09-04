@@ -9,7 +9,9 @@ export default function Configuracoes() {
     <div className="space-y-6 max-w-3xl">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Configurações</h1>
-        <p className="text-muted-foreground">Preferências e integrações do sistema</p>
+        <p className="text-muted-foreground">
+          Preferências e integrações do sistema
+        </p>
       </div>
 
       <Card>
@@ -30,14 +32,18 @@ export default function Configuracoes() {
           <div className="flex items-center justify-between rounded-md border p-3">
             <div>
               <Label>Modo escuro</Label>
-              <p className="text-xs text-muted-foreground">Ativar tema escuro</p>
+              <p className="text-xs text-muted-foreground">
+                Ativar tema escuro
+              </p>
             </div>
             <Switch />
           </div>
           <div className="flex items-center justify-between rounded-md border p-3">
             <div>
               <Label>Alertas por e-mail</Label>
-              <p className="text-xs text-muted-foreground">Receber notificações de prazos</p>
+              <p className="text-xs text-muted-foreground">
+                Receber notificações de prazos
+              </p>
             </div>
             <Switch defaultChecked />
           </div>
@@ -53,12 +59,16 @@ export default function Configuracoes() {
           <div className="rounded-md border p-4">
             <div className="font-medium">Mapas</div>
             <p className="text-sm text-muted-foreground">Mapbox, Google Maps</p>
-            <Button variant="outline" className="mt-3">Conectar</Button>
+            <Button variant="outline" className="mt-3">
+              Conectar
+            </Button>
           </div>
           <div className="rounded-md border p-4">
             <div className="font-medium">Armazenamento</div>
             <p className="text-sm text-muted-foreground">S3, Supabase</p>
-            <Button variant="outline" className="mt-3">Conectar</Button>
+            <Button variant="outline" className="mt-3">
+              Conectar
+            </Button>
           </div>
         </CardContent>
       </Card>

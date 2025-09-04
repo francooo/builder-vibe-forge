@@ -1,12 +1,34 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 const USERS = [
-  { nome: "Andrews Franco", email: "andrews@example.com", perfil: "Admin", status: "Ativo" },
-  { nome: "Maria Silva", email: "maria@example.com", perfil: "Gestor", status: "Ativo" },
-  { nome: "João Souza", email: "joao@example.com", perfil: "Analista", status: "Inativo" },
+  {
+    nome: "Andrews Franco",
+    email: "andrews@example.com",
+    perfil: "Admin",
+    status: "Ativo",
+  },
+  {
+    nome: "Maria Silva",
+    email: "maria@example.com",
+    perfil: "Gestor",
+    status: "Ativo",
+  },
+  {
+    nome: "João Souza",
+    email: "joao@example.com",
+    perfil: "Analista",
+    status: "Inativo",
+  },
 ];
 
 export default function Equipe() {
@@ -15,7 +37,9 @@ export default function Equipe() {
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Equipe</h1>
-          <p className="text-muted-foreground">Gerencie usuários e permissões</p>
+          <p className="text-muted-foreground">
+            Gerencie usuários e permissões
+          </p>
         </div>
         <Button>Novo usuário</Button>
       </div>
@@ -40,11 +64,30 @@ export default function Equipe() {
                 <TableRow key={i}>
                   <TableCell className="font-medium">{u.nome}</TableCell>
                   <TableCell>{u.email}</TableCell>
-                  <TableCell><Badge variant="outline">{u.perfil}</Badge></TableCell>
-                  <TableCell>{u.status === "Ativo" ? <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border-0">Ativo</Badge> : <Badge className="bg-muted text-foreground/70" variant="secondary">Inativo</Badge>}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{u.perfil}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    {u.status === "Ativo" ? (
+                      <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border-0">
+                        Ativo
+                      </Badge>
+                    ) : (
+                      <Badge
+                        className="bg-muted text-foreground/70"
+                        variant="secondary"
+                      >
+                        Inativo
+                      </Badge>
+                    )}
+                  </TableCell>
                   <TableCell className="text-right">
-                    <Button size="sm" variant="ghost">Editar</Button>
-                    <Button size="sm" variant="ghost">Remover</Button>
+                    <Button size="sm" variant="ghost">
+                      Editar
+                    </Button>
+                    <Button size="sm" variant="ghost">
+                      Remover
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

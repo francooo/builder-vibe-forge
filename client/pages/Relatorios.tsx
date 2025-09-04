@@ -1,7 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Line, LineChart, CartesianGrid, XAxis, Area, AreaChart } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import {
+  Line,
+  LineChart,
+  CartesianGrid,
+  XAxis,
+  Area,
+  AreaChart,
+} from "recharts";
 
 const SERIES = [
   { month: "Jan", novas: 5, renovacoes: 2 },
@@ -32,13 +43,37 @@ export default function Relatorios() {
             <CardTitle>Licenças emitidas (YTD)</CardTitle>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={{ novas: { label: "Novas" }, renovacoes: { label: "Renovações" } }} className="h-[280px]">
+            <ChartContainer
+              config={{
+                novas: { label: "Novas" },
+                renovacoes: { label: "Renovações" },
+              }}
+              className="h-[280px]"
+            >
               <LineChart data={SERIES}>
                 <CartesianGrid vertical={false} />
-                <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={10} />
-                <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-                <Line dataKey="novas" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-                <Line dataKey="renovacoes" stroke="#06b6d4" strokeWidth={2} dot={false} />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={10}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent />}
+                />
+                <Line
+                  dataKey="novas"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth={2}
+                  dot={false}
+                />
+                <Line
+                  dataKey="renovacoes"
+                  stroke="#06b6d4"
+                  strokeWidth={2}
+                  dot={false}
+                />
               </LineChart>
             </ChartContainer>
           </CardContent>
@@ -48,12 +83,32 @@ export default function Relatorios() {
             <CardTitle>Backlog (em análise)</CardTitle>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={{ pendentes: { label: "Pendentes" } }} className="h-[280px]">
-              <AreaChart data={SERIES.map((d) => ({ month: d.month, pendentes: Math.round((d.novas + d.renovacoes) * 0.7) }))}>
+            <ChartContainer
+              config={{ pendentes: { label: "Pendentes" } }}
+              className="h-[280px]"
+            >
+              <AreaChart
+                data={SERIES.map((d) => ({
+                  month: d.month,
+                  pendentes: Math.round((d.novas + d.renovacoes) * 0.7),
+                }))}
+              >
                 <CartesianGrid vertical={false} />
-                <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={10} />
-                <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-                <Area dataKey="pendentes" fill="hsl(var(--primary))" stroke="hsl(var(--primary))" />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={10}
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent />}
+                />
+                <Area
+                  dataKey="pendentes"
+                  fill="hsl(var(--primary))"
+                  stroke="hsl(var(--primary))"
+                />
               </AreaChart>
             </ChartContainer>
           </CardContent>

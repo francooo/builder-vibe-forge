@@ -19,7 +19,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+} from "@/components/ui/breadcrumb";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
@@ -97,7 +101,10 @@ export default function AppLayout() {
               <SidebarMenu>
                 {routes.slice(0, 8).map((r) => (
                   <SidebarMenuItem key={r.to}>
-                    <SidebarMenuButton asChild isActive={location.pathname === r.to}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={location.pathname === r.to}
+                    >
                       <NavLink to={r.to} className="flex items-center gap-2">
                         <r.icon className="size-4" />
                         <span>{r.label}</span>
@@ -115,7 +122,10 @@ export default function AppLayout() {
               <SidebarMenu>
                 {routes.slice(8).map((r) => (
                   <SidebarMenuItem key={r.to}>
-                    <SidebarMenuButton asChild isActive={location.pathname === r.to}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={location.pathname === r.to}
+                    >
                       <NavLink to={r.to} className="flex items-center gap-2">
                         <r.icon className="size-4" />
                         <span>{r.label}</span>
@@ -134,7 +144,9 @@ export default function AppLayout() {
             </Avatar>
             <div className="flex-1 truncate">
               <p className="text-xs font-medium leading-none">Andrews Franco</p>
-              <p className="text-[10px] text-muted-foreground leading-none">admin</p>
+              <p className="text-[10px] text-muted-foreground leading-none">
+                admin
+              </p>
             </div>
             <Button asChild size="sm" variant="outline" className="h-7 text-xs">
               <Link to="/configuracoes">Painel</Link>
@@ -151,7 +163,15 @@ export default function AppLayout() {
               {crumbs.map((c, i) => (
                 <BreadcrumbItem key={c.href}>
                   <BreadcrumbLink asChild>
-                    <NavLink to={c.href} className={cn(i === crumbs.length - 1 && "text-foreground font-medium")}>{c.label}</NavLink>
+                    <NavLink
+                      to={c.href}
+                      className={cn(
+                        i === crumbs.length - 1 &&
+                          "text-foreground font-medium",
+                      )}
+                    >
+                      {c.label}
+                    </NavLink>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
               ))}

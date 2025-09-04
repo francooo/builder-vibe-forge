@@ -1,12 +1,34 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useState } from "react";
 
 const PRAZOS = [
-  { data: new Date(), titulo: "Relatório de monitoramento trimestral", tipo: "Condicionante", ref: "C-01/2023" },
-  { data: addDays(new Date(), 3), titulo: "Protocolo de renovação LO", tipo: "Licença", ref: "LIC-2021-0777" },
-  { data: addDays(new Date(), 9), titulo: "Vistoria de campo - Rio Verde", tipo: "Vistoria", ref: "VIS-2025-019" },
+  {
+    data: new Date(),
+    titulo: "Relatório de monitoramento trimestral",
+    tipo: "Condicionante",
+    ref: "C-01/2023",
+  },
+  {
+    data: addDays(new Date(), 3),
+    titulo: "Protocolo de renovação LO",
+    tipo: "Licença",
+    ref: "LIC-2021-0777",
+  },
+  {
+    data: addDays(new Date(), 9),
+    titulo: "Vistoria de campo - Rio Verde",
+    tipo: "Vistoria",
+    ref: "VIS-2025-019",
+  },
 ];
 
 export default function Agenda() {
@@ -19,7 +41,12 @@ export default function Agenda() {
           <CardTitle>Agenda</CardTitle>
         </CardHeader>
         <CardContent>
-          <Calendar mode="single" selected={selected} onSelect={setSelected} className="rounded-md border" />
+          <Calendar
+            mode="single"
+            selected={selected}
+            onSelect={setSelected}
+            className="rounded-md border"
+          />
         </CardContent>
       </Card>
 
@@ -40,7 +67,9 @@ export default function Agenda() {
             <TableBody>
               {PRAZOS.map((p, i) => (
                 <TableRow key={i}>
-                  <TableCell className="font-medium">{formatDate(p.data)}</TableCell>
+                  <TableCell className="font-medium">
+                    {formatDate(p.data)}
+                  </TableCell>
                   <TableCell>{p.titulo}</TableCell>
                   <TableCell>{p.tipo}</TableCell>
                   <TableCell>{p.ref}</TableCell>

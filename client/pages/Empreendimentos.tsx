@@ -1,12 +1,37 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const DATA = [
-  { nome: "Fazenda Boa Vista", cnpj: "12.345.678/0001-99", municipio: "Goiânia/GO", atividade: "Agropecuária", licencas: 4 },
-  { nome: "Usina Rio Verde", cnpj: "98.765.432/0001-11", municipio: "Cuiabá/MT", atividade: "Geração de Energia", licencas: 6 },
-  { nome: "Porto Amazônia", cnpj: "01.234.567/0001-22", municipio: "Manaus/AM", atividade: "Logística Portuária", licencas: 3 },
+  {
+    nome: "Fazenda Boa Vista",
+    cnpj: "12.345.678/0001-99",
+    municipio: "Goiânia/GO",
+    atividade: "Agropecuária",
+    licencas: 4,
+  },
+  {
+    nome: "Usina Rio Verde",
+    cnpj: "98.765.432/0001-11",
+    municipio: "Cuiabá/MT",
+    atividade: "Geração de Energia",
+    licencas: 6,
+  },
+  {
+    nome: "Porto Amazônia",
+    cnpj: "01.234.567/0001-22",
+    municipio: "Manaus/AM",
+    atividade: "Logística Portuária",
+    licencas: 3,
+  },
 ];
 
 export default function Empreendimentos() {
@@ -15,7 +40,9 @@ export default function Empreendimentos() {
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Empreendimentos</h1>
-          <p className="text-muted-foreground">Cadastro de empreendimentos e empresas</p>
+          <p className="text-muted-foreground">
+            Cadastro de empreendimentos e empresas
+          </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline">Importar</Button>

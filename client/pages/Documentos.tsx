@@ -1,11 +1,30 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
 const DOCS = [
-  { nome: "Modelo - Requerimento de Licença", tipo: "Modelo", atualizado: "01/08/2025" },
-  { nome: "Check-list de Renovação LO", tipo: "Checklist", atualizado: "17/07/2025" },
-  { nome: "Plano de Monitoramento - Água", tipo: "Procedimento", atualizado: "09/06/2025" },
+  {
+    nome: "Modelo - Requerimento de Licença",
+    tipo: "Modelo",
+    atualizado: "01/08/2025",
+  },
+  {
+    nome: "Check-list de Renovação LO",
+    tipo: "Checklist",
+    atualizado: "17/07/2025",
+  },
+  {
+    nome: "Plano de Monitoramento - Água",
+    tipo: "Procedimento",
+    atualizado: "09/06/2025",
+  },
 ];
 
 export default function Documentos() {
@@ -14,7 +33,9 @@ export default function Documentos() {
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Documentos</h1>
-          <p className="text-muted-foreground">Repositório de arquivos e modelos</p>
+          <p className="text-muted-foreground">
+            Repositório de arquivos e modelos
+          </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline">Nova Pasta</Button>
@@ -43,8 +64,12 @@ export default function Documentos() {
                   <TableCell>{d.tipo}</TableCell>
                   <TableCell>{d.atualizado}</TableCell>
                   <TableCell className="text-right">
-                    <Button size="sm" variant="ghost">Baixar</Button>
-                    <Button size="sm" variant="ghost">Renomear</Button>
+                    <Button size="sm" variant="ghost">
+                      Baixar
+                    </Button>
+                    <Button size="sm" variant="ghost">
+                      Renomear
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
