@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -8,6 +9,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useTenant } from "@/contexts/TenantContext";
+import NovoEstudoForm from "@/components/forms/NovoEstudoForm";
 
 const DATA = [
   {
@@ -34,15 +38,39 @@ const DATA = [
 ];
 
 export default function EstudosAmbientais() {
+  const [estudos, setEstudos] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const { token } = useTenant();
+
+  useEffect(() => {
+    if (token) {
+      fetchEstudos();
+    }
+  }, [token]);
+
+  const fetchEstudos = async () => {
+    try {
+      const response = await fetch('/api/tenant/estudos', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setEstudos(data);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar estudos:', error);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">
-          Estudos Ambientais
-        </h1>
-        <p className="text-muted-foreground">
-          Gestão de EIA/RIMA, RCA, PCA, PRAD e mais
-        </p>
+      <div className="flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">
+            Estudos Ambientais
+          </h1>
+        </div>
+        <Button onClick={() => setShowForm(true)}>Novo Estudo</Button>
       </div>
 
       <Card>
@@ -61,19 +89,25 @@ export default function EstudosAmbientais() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {DATA.map((r, i) => (
-                <TableRow key={i}>
-                  <TableCell className="font-medium">{r.doc}</TableCell>
-                  <TableCell>{r.empreendimento}</TableCell>
+              {estudos.map((r: any) => (
+                <TableRow key={r.id}>
+                  <TableCell className="font-medium">{r.tipo}</TableCell>
+                  <TableCell>{r.empreendimento_nome || 'N/A'}</TableCell>
                   <TableCell>{statusBadge(r.status)}</TableCell>
                   <TableCell>{r.orgao}</TableCell>
-                  <TableCell>{r.data}</TableCell>
+                  <TableCell>{r.data_protocolo ? new Date(r.data_protocolo).toLocaleDateString('pt-BR') : '-'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
+      
+      <NovoEstudoForm 
+        open={showForm} 
+        onClose={() => setShowForm(false)} 
+        onSuccess={fetchEstudos}
+      />
     </div>
   );
 }

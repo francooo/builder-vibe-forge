@@ -30,7 +30,7 @@ export class TenantService {
   }
 
   static async getTenantConfig(tenantId: number) {
-    const query = 'SELECT nome, logo_url, cor_primaria, cor_secundaria, configuracoes FROM tenants WHERE id = $1';
+    const query = 'SELECT id, nome, slug, logo_url, cor_primaria, cor_secundaria, configuracoes FROM tenants WHERE id = $1';
     const result = await pool.query(query, [tenantId]);
     return result.rows[0];
   }

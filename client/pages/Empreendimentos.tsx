@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTenant } from "@/contexts/TenantContext";
+import NovoEmpreendimentoForm from "@/components/forms/NovoEmpreendimentoForm";
 
 interface Empreendimento {
   id: number;
@@ -24,6 +25,7 @@ interface Empreendimento {
 export default function Empreendimentos() {
   const [empreendimentos, setEmpreendimentos] = useState<Empreendimento[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   const { token, tenant } = useTenant();
 
   useEffect(() => {
@@ -59,13 +61,10 @@ export default function Empreendimentos() {
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Empreendimentos</h1>
-          <p className="text-muted-foreground">
-            {tenant?.nome} - Cadastro de empreendimentos e empresas
-          </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline">Importar</Button>
-          <Button>Novo Empreendimento</Button>
+          <Button onClick={() => setShowForm(true)}>Novo Empreendimento</Button>
         </div>
       </div>
 
@@ -105,6 +104,12 @@ export default function Empreendimentos() {
           </Table>
         </CardContent>
       </Card>
+      
+      <NovoEmpreendimentoForm 
+        open={showForm} 
+        onClose={() => setShowForm(false)} 
+        onSuccess={fetchEmpreendimentos}
+      />
     </div>
   );
 }

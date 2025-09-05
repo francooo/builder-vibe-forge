@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "react-router-dom";
+import { useTenant } from "@/contexts/TenantContext";
+import NovaLicencaForm from "@/components/forms/NovaLicencaForm";
 
 const DATA = [
   {
@@ -59,9 +60,32 @@ export default function Licencas() {
   const [q, setQ] = useState("");
   const [status, setStatus] = useState<string>("todos");
   const [tipo, setTipo] = useState<string>("todos");
+  const [licencas, setLicencas] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const { token } = useTenant();
+
+  useEffect(() => {
+    if (token) {
+      fetchLicencas();
+    }
+  }, [token]);
+
+  const fetchLicencas = async () => {
+    try {
+      const response = await fetch('/api/tenant/licencas', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setLicencas(data);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar licenças:', error);
+    }
+  };
 
   const filtered = useMemo(() => {
-    return DATA.filter((r) => {
+    return licencas.filter((r: any) => {
       const matchesQ = q
         ? Object.values(r).join(" ").toLowerCase().includes(q.toLowerCase())
         : true;
@@ -71,22 +95,17 @@ export default function Licencas() {
         tipo === "todos" ? true : r.tipo.toLowerCase() === tipo;
       return matchesQ && matchesStatus && matchesTipo;
     });
-  }, [q, status, tipo]);
+  }, [q, status, tipo, licencas]);
 
   return (
     <div className="space-y-6">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Licenças</h1>
-          <p className="text-muted-foreground">
-            Gerencie todo o ciclo de vida das licenças ambientais
-          </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline">Importar</Button>
-          <Button asChild>
-            <Link to="#">Nova Licença</Link>
-          </Button>
+          <Button onClick={() => setShowForm(true)}>Nova Licença</Button>
         </div>
       </div>
 
@@ -146,16 +165,16 @@ export default function Licencas() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map((r) => (
+              {filtered.map((r: any) => (
                 <TableRow key={r.id}>
-                  <TableCell className="font-medium">{r.id}</TableCell>
+                  <TableCell className="font-medium">{r.numero}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{r.tipo}</Badge>
                   </TableCell>
                   <TableCell>{renderStatus(r.status)}</TableCell>
-                  <TableCell>{r.empreendimento}</TableCell>
-                  <TableCell>{r.uf}</TableCell>
-                  <TableCell>{r.validade}</TableCell>
+                  <TableCell>{r.empreendimento_nome || 'N/A'}</TableCell>
+                  <TableCell>{r.orgao}</TableCell>
+                  <TableCell>{r.data_vencimento ? new Date(r.data_vencimento).toLocaleDateString('pt-BR') : '-'}</TableCell>
                   <TableCell className="text-right">
                     <Button size="sm" variant="ghost">
                       Ver
@@ -170,6 +189,12 @@ export default function Licencas() {
           </Table>
         </CardContent>
       </Card>
+      
+      <NovaLicencaForm 
+        open={showForm} 
+        onClose={() => setShowForm(false)} 
+        onSuccess={fetchLicencas}
+      />
     </div>
   );
 }

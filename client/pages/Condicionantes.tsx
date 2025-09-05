@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -8,6 +9,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useTenant } from "@/contexts/TenantContext";
+import NovaCondicionanteForm from "@/components/forms/NovaCondicionanteForm";
 
 const DATA = [
   {
@@ -34,13 +38,37 @@ const DATA = [
 ];
 
 export default function Condicionantes() {
+  const [condicionantes, setCondicionantes] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const { token } = useTenant();
+
+  useEffect(() => {
+    if (token) {
+      fetchCondicionantes();
+    }
+  }, [token]);
+
+  const fetchCondicionantes = async () => {
+    try {
+      const response = await fetch('/api/tenant/condicionantes', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setCondicionantes(data);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar condicionantes:', error);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Condicionantes</h1>
-        <p className="text-muted-foreground">
-          Controle de condicionantes e obrigações
-        </p>
+      <div className="flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Condicionantes</h1>
+        </div>
+        <Button onClick={() => setShowForm(true)}>Nova Condicionante</Button>
       </div>
 
       <Card>
@@ -59,14 +87,14 @@ export default function Condicionantes() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {DATA.map((r) => (
-                <TableRow key={r.codigo}>
+              {condicionantes.map((r: any) => (
+                <TableRow key={r.id}>
                   <TableCell className="font-medium">{r.codigo}</TableCell>
                   <TableCell className="max-w-xl truncate" title={r.descricao}>
                     {r.descricao}
                   </TableCell>
                   <TableCell>{r.responsavel}</TableCell>
-                  <TableCell>{r.prazo}</TableCell>
+                  <TableCell>{r.prazo ? new Date(r.prazo).toLocaleDateString('pt-BR') : '-'}</TableCell>
                   <TableCell>{statusPill(r.status)}</TableCell>
                 </TableRow>
               ))}
@@ -74,6 +102,12 @@ export default function Condicionantes() {
           </Table>
         </CardContent>
       </Card>
+      
+      <NovaCondicionanteForm 
+        open={showForm} 
+        onClose={() => setShowForm(false)} 
+        onSuccess={fetchCondicionantes}
+      />
     </div>
   );
 }

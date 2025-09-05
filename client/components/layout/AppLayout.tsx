@@ -41,6 +41,7 @@ import {
   Search,
 } from "lucide-react";
 import React from "react";
+import { useTenant } from "@/contexts/TenantContext";
 
 const routes = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -58,10 +59,22 @@ const routes = [
 ];
 
 function Brand() {
+  const { tenant } = useTenant();
+  
   return (
     <Link to="/" className="flex items-center gap-2 px-2 py-1">
-      <div className="size-6 rounded-md bg-gradient-to-br from-primary to-emerald-500" />
-      <span className="font-extrabold tracking-tight">EcoLicenças</span>
+      {tenant?.logo_url ? (
+        <img 
+          src={tenant.logo_url} 
+          alt={tenant.nome} 
+          className="h-6 w-auto max-w-[100px] object-contain"
+        />
+      ) : (
+        <>
+          <div className="size-6 rounded-md bg-gradient-to-br from-primary to-emerald-500" />
+          <span className="font-extrabold tracking-tight">EcoLicenças</span>
+        </>
+      )}
     </Link>
   );
 }
@@ -72,7 +85,7 @@ export default function AppLayout() {
   const crumbs = React.useMemo(() => {
     const parts = location.pathname.split("/").filter(Boolean);
     const items = [
-      { href: "/", label: "Início" },
+      { href: "/", label: "Dashboard" },
       ...parts.map((p, i) => {
         const href = "/" + parts.slice(0, i + 1).join("/");
         const found = routes.find((r) => r.to === href);
@@ -159,21 +172,26 @@ export default function AppLayout() {
           <div className="flex h-14 items-center gap-3 px-4">
             <SidebarTrigger />
             <Separator orientation="vertical" className="h-6" />
-            <Breadcrumb>
+            <Breadcrumb className="gap-2">
               {crumbs.map((c, i) => (
-                <BreadcrumbItem key={c.href}>
-                  <BreadcrumbLink asChild>
-                    <NavLink
-                      to={c.href}
-                      className={cn(
-                        i === crumbs.length - 1 &&
-                          "text-foreground font-medium",
-                      )}
-                    >
-                      {c.label}
-                    </NavLink>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
+                <React.Fragment key={c.href}>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink asChild>
+                      <NavLink
+                        to={c.href}
+                        className={cn(
+                          i === crumbs.length - 1 &&
+                            "text-foreground font-medium",
+                        )}
+                      >
+                        {c.label}
+                      </NavLink>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  {i < crumbs.length - 1 && (
+                    <span className="text-muted-foreground px-2">•••</span>
+                  )}
+                </React.Fragment>
               ))}
             </Breadcrumb>
             <div className="ml-auto flex items-center gap-2">
